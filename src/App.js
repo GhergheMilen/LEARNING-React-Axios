@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 const tempMovieData = [
   {
@@ -48,10 +49,25 @@ const tempWatchedData = [
 ];
 
 const average = (arr) => arr.reduce((acc, cur, i, arr) => acc + cur / arr.length, 0);
+const MY_API_KEY = process.env.REACT_APP_MY_API_KEY;
 
 export default function App() {
   const [movies, setMovies] = useState(tempMovieData);
   const [watched, setWatched] = useState(tempWatchedData);
+
+  useEffect(() => {
+    const fetchMovie = async () => {
+      try {
+        const result = await axios.get(
+          `http://www.omdbapi.com/?apikey=${MY_API_KEY}&s=spiderman`
+        );
+        setMovies(result.data.Search);
+      } catch (err) {
+        console.log("❌ ERROR AT FETCHING DATA");
+      }
+    };
+    fetchMovie();
+  }, []);
 
   return (
     <>
