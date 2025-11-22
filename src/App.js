@@ -54,19 +54,42 @@ const MY_API_KEY = process.env.REACT_APP_MY_API_KEY;
 export default function App() {
   const [movies, setMovies] = useState(tempMovieData);
   const [watched, setWatched] = useState(tempWatchedData);
+  const [isLoading, setIsLoading] = useState(false);
+  const query = "interstellar";
+
+  // useEffect(() => {
+  //   const fetchMovie = async () => {
+  //     try {
+  //       const result = await axios.get(
+  //         `http://www.omdbapi.com/?apikey=${MY_API_KEY}&s=spiderman`
+  //       );
+  //       if (result.data.Search) {
+  //         setMovies(result.data.Search);
+  //       }
+  //     } catch (err) {
+  //       console.log("❌ ERROR AT FETCHING DATA");
+  //     }
+  //   };
+  //   fetchMovie();
+  // }, []);
 
   useEffect(() => {
-    const fetchMovie = async () => {
+    async function fetchMovies() {
+      setIsLoading(true);
       try {
-        const result = await axios.get(
-          `http://www.omdbapi.com/?apikey=${MY_API_KEY}&s=spiderman`
+        const res = await axios.get(
+          `http://www.omdbapi.com/?apikey=${MY_API_KEY}&s=${query}`
         );
-        setMovies(result.data.Search);
+        if (res.data.Search) {
+          setMovies(res.data.Search);
+          console.log(res.data.Search);
+          setIsLoading(false);
+        }
       } catch (err) {
         console.log("❌ ERROR AT FETCHING DATA");
       }
-    };
-    fetchMovie();
+    }
+    fetchMovies();
   }, []);
 
   return (
@@ -77,9 +100,7 @@ export default function App() {
       </Navbar>
 
       <Main>
-        <Box>
-          <MovieList movies={movies}></MovieList>
-        </Box>
+        <Box>{isLoading ? <Loader /> : <MovieList movies={movies}></MovieList>} </Box>
 
         <Box>
           <WatchedSummary watched={watched}></WatchedSummary>
@@ -88,6 +109,10 @@ export default function App() {
       </Main>
     </>
   );
+}
+
+function Loader() {
+  return <p className="loader">Loading...</p>;
 }
 
 function Navbar({ children }) {

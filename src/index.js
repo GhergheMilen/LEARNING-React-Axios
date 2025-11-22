@@ -5,11 +5,4 @@ import App from "./App";
 import StarRating from "./StarRating";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
-root.render(<App />, {
-  /* <StarRating
-      maxRating={5}
-      messages={["Terrible", "Bad", "Ok", "Good", "Great!"]}
-    ></StarRating>
-    <StarRating maxRating={5} color="red" size={24} className="test"></StarRating>
-    <StarRating maxRating={5} color="green" size={16} defaultRating={3}></StarRating> */
-});
+root.render(<App />);
